@@ -1,0 +1,6 @@
+{
+    "board": "arduino:avr:uno",
+    "output": "hyPon\\build",
+    "programmer": "arduino:avrispmkii",
+    "sketch": "hyPon\\hyPon.ino"
+}
