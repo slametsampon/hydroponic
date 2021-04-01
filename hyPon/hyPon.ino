@@ -1,5 +1,6 @@
 #include    "src\digitalInput\digitalInput.h"
 #include    "src\digitalOutput\DigitalOutput.h"
+#include    "src\sequenceTimer\sequenceTimer.h"
 #include    "dipSet.h"
 
 
@@ -12,6 +13,7 @@ const int PIN_SET2          = 12;
 const int PIN_RELAY         = 9; 
 
 //Variables declaration
+SequenceTimer SequenceMain("Sequence");
 
 //Variables declaration for FPSys
 DigitalInput        set0(PIN_SET0);//use pin PIN_SET0 for setting
@@ -32,12 +34,6 @@ void setup() {
     delay(500);
 
     initPbLed();
-
-    String str;
-    str = String("lifeLed \n");//with new line
-    str = String(str + lifeLed.info());
-    Serial.println(str);
-    
 }
 
 // the loop function runs over and over again forever
@@ -47,10 +43,27 @@ void loop() {
     int nutritionVal = analogRead(PIN_SENSOR);
     int setVal = setting.getSet();
 
-    if (nutritionVal <= setVal)rlPump.on();
+    //conversion, 1023 = 10 bits ADC, 7 = 3 bits DIP setting
+    //DIP set is week number ( 0 -7)
+    int nutritionSet = setVal * 1023/7;
 
-    //if (set1.isStatus())rlPump.on();
+    //Controller logic
+
+    if (nutritionVal <= nutritionSet)rlPump.on();
     else rlPump.off();
+
+    SequenceMain.execute();
+    if(SequenceMain.isASecondEvent()){
+
+        Serial.print("Week : ");
+        Serial.println(setVal);
+
+        Serial.print("nutritionSet : ");
+        Serial.println(nutritionSet);
+
+        Serial.print("nutritionVal : ");
+        Serial.println(nutritionVal);
+    }
 
 }
 

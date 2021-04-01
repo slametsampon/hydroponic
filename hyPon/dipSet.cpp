@@ -14,13 +14,13 @@
 DipSet::DipSet(DigitalInput *set0, DigitalInput *set1, DigitalInput *set2): _set0(set0), _set1(set1), _set2(set2){}
 
 int DipSet::getSet(){
-    int set0, set1, set2;
-    if (_set0->isStatus()) set0 = 1;
-    if (_set1->isStatus()) set1 = 2;
-    if (_set2->isStatus()) set2 = 4;
+    int val = 0;
+    if (_set0->isStatus()) val += 1;
+    if (_set1->isStatus()) val += 2;
+    if (_set2->isStatus()) val += 4;
 
     //1023 is ADC 10 bits
-    return ((set0 + set1 + set2)*1023/8);
+    return (val);
 }
 
 void DipSet::info(){
