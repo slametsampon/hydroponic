@@ -24,10 +24,9 @@ void DigitalInput::init(boolean typ){
 
 void DigitalInput::init(String id){
   _id = id;
+  _digTyp = REVERSE_DI;
   
-  if (!_digTyp)pinMode(_pin, INPUT_PULLUP);
-
-  else pinMode(_pin, INPUT);
+  pinMode(_pin, INPUT_PULLUP);
 }
 
 boolean DigitalInput::isStatus(){
