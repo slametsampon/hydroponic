@@ -1,3 +1,17 @@
+/*
+Setting :
+Week    Konsentarsi nutrisi (simulasi)
+0           0
+1           146
+2           292
+3           438
+4           584
+5           730
+6           876
+7           1023
+*/
+
+
 #include    "src\digitalInput\digitalInput.h"
 #include    "src\digitalOutput\DigitalOutput.h"
 #include    "src\sequenceTimer\sequenceTimer.h"
