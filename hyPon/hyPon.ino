@@ -1,5 +1,7 @@
 /*
 Setting :
+week = Dip-switch setting
+Konsentarsi nutrisi = (week * 1023)/7 => 1023 : 10 bits, 7 : 3 bits
 Week    Konsentarsi nutrisi (simulasi)
 0           0
 1           146
