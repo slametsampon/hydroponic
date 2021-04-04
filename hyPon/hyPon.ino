@@ -2,15 +2,15 @@
 Setting :
 week = Dip-switch setting
 Konsentarsi nutrisi = (week * 1023)/7 => 1023 : 10 bits, 7 : 3 bits
-Week    Konsentarsi nutrisi (simulasi)
-0           0
-1           146
-2           292
-3           438
-4           584
-5           730
-6           876
-7           1023
+S0  S1  S2  Week    Konsentarsi nutrisi (simulasi)
+0   0   0   0           0
+1   0   0   1           146
+0   1   0   2           292
+1   1   0   3           438
+0   0   1   4           584
+1   0   1   5           730
+0   1   1   6           876
+1   1   1   7           1023
 */
 
 
@@ -27,6 +27,8 @@ const int PIN_SET1          = 11;
 const int PIN_SET2          = 12; 
 
 const int PIN_RELAY         = 9; 
+
+int prevNutritionVal, prevNutritionSet;
 
 //Variables declaration
 SequenceTimer SequenceMain("Sequence");
@@ -50,10 +52,12 @@ void setup() {
     delay(500);
 
     initPbLed();
+    wellcome();
 }
 
 // the loop function runs over and over again forever
 void loop() {
+    boolean isException = false;
     lifeLed.blink(500);//in milli second
 
     int nutritionVal = analogRead(PIN_SENSOR);
@@ -64,12 +68,18 @@ void loop() {
     int nutritionSet = setVal * 1023/7;
 
     //Controller logic
-
     if (nutritionVal <= nutritionSet)rlPump.on();
     else rlPump.off();
 
-    SequenceMain.execute();
-    if(SequenceMain.isASecondEvent()){
+    //get exception
+    if(prevNutritionSet != nutritionSet)isException = true;
+    else if(prevNutritionVal != nutritionVal)isException = true;
+
+    //report by exception
+    if(isException){
+        //isException = false;
+        prevNutritionSet = nutritionSet;
+        prevNutritionVal = nutritionVal;
 
         Serial.print("Week : ");
         Serial.println(setVal);
@@ -95,4 +105,11 @@ void initPbLed(){
 
     //initialization LEDs
     lifeLed.init("lifeLed");
+}
+
+void wellcome(){
+    Serial.print("");
+    Serial.println("Hydroponic System Ver.01");
+    Serial.println("By Salman Alfarisi");
+    Serial.print("");
 }
